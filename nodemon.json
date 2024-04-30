@@ -1,0 +1,14 @@
+{
+    "watch": [
+        "src/server",
+        "src/utils"
+    ],
+    "ext": "js,json,env",
+    "ignore": [
+        "src/**/*.spec.ts",
+        "logs",
+        "nodemon.json",
+        "*.html"
+    ],
+    "exec": "node src/server/index.js"
+}
