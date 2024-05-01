@@ -1,11 +1,12 @@
-import 'module-alias/register.js'
+import "module-alias/register.js";
 import express from "express";
 import { PORT } from "./config.js";
+// import app from "./routes/index";
 
-const app = express()
+const app = express();
 
-app.get("/", (_, res) => res.send("Hello"))
+app.get("/", (_, res) => res.send("Hello"));
 
 app.listen(PORT, () => {
-    console.log("Server Listening on port:", PORT)
-})
+    console.log("Server Listening on port:", PORT);
+});
