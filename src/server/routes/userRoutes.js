@@ -1,5 +1,6 @@
 import express from "express";
 import User from "../models/user.js";
+import { UserRoles } from "../../utils/roles.js";
 
 const router = express.Router();
 
@@ -12,6 +13,7 @@ router.post("/", async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 });
+
 
 router.post("/login", async (req, res) => {
     if (!req.body.password || !req.body.email) {
@@ -29,6 +31,15 @@ router.post("/login", async (req, res) => {
 router.get("/", async (req, res) => {
     try {
         const users = await User.find().populate("admin");
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.get("/doctors", async (req, res) => {
+    try {
+        const users = await User.find({ role: UserRoles.doctor }).populate("admin");
         res.json(users);
     } catch (err) {
         res.status(500).json({ error: err.message });

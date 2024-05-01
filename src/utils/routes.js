@@ -5,7 +5,8 @@ const urls = {
         create: `${serverPath}/user`,
         findById: `${serverPath}/user/{id}`,
         update: `${serverPath}/user/{id}`,
-        login: `${serverPath}/user/login`
+        login: `${serverPath}/user/login`,
+        doctors: `${serverPath}/user/doctors`
     }
 }
 

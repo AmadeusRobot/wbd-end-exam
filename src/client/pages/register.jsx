@@ -31,7 +31,10 @@ export default function Register() {
             name: data.get('name'),
             dob: data.get('dob'),
             phone: data.get('phone'),
-            role
+            role,
+            ...([UserRoles.doctor, UserRoles.nurse].includes(role) && {
+                hospital: data.get('hospital')
+            })
         }
         await trigger(req)
     };
@@ -142,7 +145,6 @@ export default function Register() {
                                 fullWidth
                                 name="hospital"
                                 label="Hospital"
-                                type="password"
                                 id="hospital"
                             />
                         </Grid>
