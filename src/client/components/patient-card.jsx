@@ -11,12 +11,12 @@ export default function PatientCard({ doctor }) {
                 <Typography gutterBottom variant="h5" component="div">
                     Doctor
                 </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    Hospital
+                </Typography>
                 <div style={{ display: "flex", alignItems: "center" }}>
-                    <Typography variant="body2" color="text.secondary">
-                        Fee: {"  "}
-                    </Typography>
                     <Typography gutterBottom variant="h5" component="div">
-                        $
+                        $ {" "}
                     </Typography>
                 </div>
             </CardContent>

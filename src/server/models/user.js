@@ -35,7 +35,7 @@ const userSchema = new Schema({
     hospital: {
         type: String,
     },
-    fee: Number
+    fee: String
 });
 
 const User = model("User", userSchema);

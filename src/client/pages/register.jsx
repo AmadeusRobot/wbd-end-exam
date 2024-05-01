@@ -34,6 +34,9 @@ export default function Register() {
             role,
             ...([UserRoles.doctor, UserRoles.nurse].includes(role) && {
                 hospital: data.get('hospital')
+            }),
+            ...(role === UserRoles.doctor && {
+                fee: data.get('fee')
             })
         }
         await trigger(req)
@@ -140,14 +143,25 @@ export default function Register() {
                         </Grid>
                         {[UserRoles.doctor, UserRoles.nurse].includes(role) && (
                             <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                name="hospital"
-                                label="Hospital"
-                                id="hospital"
-                            />
-                        </Grid>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    name="hospital"
+                                    label="Hospital"
+                                    id="hospital"
+                                />
+                            </Grid>
+                        )}
+                        {role === UserRoles.doctor && (
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    name="fee"
+                                    label="Appointment Fees"
+                                    id="fee"
+                                />
+                            </Grid>
                         )}
                         <Grid item xs={12}>
                             <FormControlLabel
