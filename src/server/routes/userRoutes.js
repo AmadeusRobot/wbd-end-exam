@@ -13,6 +13,18 @@ router.post("/", async (req, res) => {
     }
 });
 
+router.post("/login", async (req, res) => {
+    if (!req.body.password || !req.body.email) {
+        return res.status(404).json({ error: "Bad Request" })
+    }
+    try {
+        const user = await User.find({ email: req.email })
+        res.status(201).json(user);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
 // Read (get) all users
 router.get("/", async (req, res) => {
     try {
