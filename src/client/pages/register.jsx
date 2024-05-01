@@ -9,17 +9,45 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
+import { usePoster } from '../hooks/fetcher';
+import urls from '../../utils/routes';
+import { useEffect, useState } from 'react';
+import { UserRoles } from '../../utils/roles';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 
 export default function Register() {
-    const handleSubmit = (event) => {
+    const navigate = useNavigate()
+    const { data, trigger, error, isMutating } = usePoster(urls.user.create)
+    const [role, setRole] = useState(UserRoles.user)
+    const handleChangeRole = (e) => setRole(e.target.value)
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
+        const req = {
             email: data.get('email'),
             password: data.get('password'),
-        });
+            name: data.get('name'),
+            dob: data.get('dob'),
+            phone: data.get('phone'),
+            role
+        }
+        await trigger(req)
     };
+
+    useEffect(() => {
+        if (!isMutating) {
+            if (error) {
+                console.log(error)
+                return
+            }
+            if (data) {
+                localStorage.setItem("endLabUser", JSON.stringify(data))
+                navigate(`/${role}`)
+            }
+        }
+    }, [data, error, isMutating, navigate, role])
 
     return (
         <Container component="main" maxWidth="xs">
@@ -39,25 +67,14 @@ export default function Register() {
                 </Typography>
                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                autoComplete="given-name"
-                                name="firstName"
-                                required
-                                fullWidth
-                                id="firstName"
-                                label="First Name"
-                                autoFocus
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12}>
                             <TextField
                                 required
                                 fullWidth
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="family-name"
+                                id="name"
+                                label="Name"
+                                name="name"
+                                autoComplete="name"
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -74,6 +91,26 @@ export default function Register() {
                             <TextField
                                 required
                                 fullWidth
+                                id="phone"
+                                label="Phone Number"
+                                name="phone"
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                id="dob"
+                                label="Date Of Birth"
+                                name="dob"
+                                autoComplete="dob"
+                                type='date'
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
                                 name="password"
                                 label="Password"
                                 type="password"
@@ -81,6 +118,35 @@ export default function Register() {
                                 autoComplete="new-password"
                             />
                         </Grid>
+                        <Grid item xs={12}>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    label="Role"
+                                    name='role'
+                                    value={role}
+                                    onChange={handleChangeRole}
+                                >
+                                    {Object.keys(UserRoles).map(e => (
+                                        <MenuItem value={e} key={e}>{e}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        {[UserRoles.doctor, UserRoles.nurse].includes(role) && (
+                            <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                name="hospital"
+                                label="Hospital"
+                                type="password"
+                                id="hospital"
+                            />
+                        </Grid>
+                        )}
                         <Grid item xs={12}>
                             <FormControlLabel
                                 control={<Checkbox value="allowExtraEmails" color="primary" />}

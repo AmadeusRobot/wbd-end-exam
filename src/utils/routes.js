@@ -1,4 +1,4 @@
-const serverPath = import.meta.env.VITE_SERVER_PATH
+const serverPath = import.meta.env.VITE_SERVER_PATH + "/api"
 
 const urls = {
     user: {

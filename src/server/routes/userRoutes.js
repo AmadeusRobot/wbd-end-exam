@@ -18,7 +18,7 @@ router.post("/login", async (req, res) => {
         return res.status(404).json({ error: "Bad Request" })
     }
     try {
-        const user = await User.find({ email: req.email })
+        const user = await User.findOne({ email: req.body.email })
         res.status(201).json(user);
     } catch (err) {
         res.status(400).json({ error: err.message });

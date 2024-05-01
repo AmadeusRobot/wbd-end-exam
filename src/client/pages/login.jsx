@@ -9,17 +9,35 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import urls from '../../utils/routes';
+import { usePoster } from '../hooks/fetcher';
 
 export default function Login() {
-    const handleSubmit = (event) => {
+    const navigate = useNavigate()
+    const {data, trigger, error, isMutating } = usePoster(urls.user.login)
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
+        const req = {
             email: data.get('email'),
             password: data.get('password'),
-        });
+        }
+        await trigger(req)
     };
+
+    useEffect(() => {
+        if(!isMutating) {
+            if(error) {
+                console.log(error)
+            }
+            if(data) {
+                localStorage.setItem("endLabUser", JSON.stringify(data))
+                navigate(`/${data.role}`)
+            }
+        }
+    })
 
     return (
         <Container component="main" maxWidth="xs">
