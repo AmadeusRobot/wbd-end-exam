@@ -12,6 +12,8 @@ import Typography from '@mui/material/Typography';
 
 
 export default function Login() {
+
+    console.log(import.meta.env.VITE_SERVER_PATH)
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
