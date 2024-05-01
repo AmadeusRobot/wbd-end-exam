@@ -5,17 +5,17 @@ import { UserRoles } from "../../utils/roles.js";
 const router = express.Router();
 
 // Create a new user
-router.post("/", async (req, res) => {
+const createUser = async (req, res) => {
     try {
         const user = await User.create(req.body);
         res.status(201).json(user);
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
-});
+}
+router.post("/", createUser);
 
-
-router.post("/login", async (req, res) => {
+export const loginUser = async (req, res) => {
     if (!req.body.password || !req.body.email) {
         return res.status(404).json({ error: "Bad Request" })
     }
@@ -25,29 +25,32 @@ router.post("/login", async (req, res) => {
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
-});
+}
+router.post("/login", loginUser);
 
 // Read (get) all users
-router.get("/", async (req, res) => {
+export const getAllUsers = async (req, res) => {
     try {
         const users = await User.find().populate("admin");
         res.json(users);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-});
+}
+router.get("/", getAllUsers);
 
-router.get("/doctors", async (req, res) => {
+export const doctors = async (req, res) => {
     try {
         const users = await User.find({ role: UserRoles.doctor }).populate("admin");
         res.json(users);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-});
+}
+router.get("/doctors", doctors);
 
 // Read (get) a single user by ID
-router.get("/:id", async (req, res) => {
+export const findUserByID = async (req, res) => {
     try {
         const user = await User.findById(req.params.id).populate("admin");
         if (!user) {
@@ -57,10 +60,11 @@ router.get("/:id", async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-});
+}
+router.get("/:id", findUserByID);
 
 // Update a user
-router.put("/:id", async (req, res) => {
+export const updateUser =  async (req, res) => {
     try {
         const user = await User.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -72,10 +76,11 @@ router.put("/:id", async (req, res) => {
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
-});
+}
+router.put("/:id", updateUser);
 
 // Delete a user
-router.delete("/:id", async (req, res) => {
+const deleteUser = async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
         if (!user) {
@@ -85,6 +90,7 @@ router.delete("/:id", async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-});
+}
+router.delete("/:id", deleteUser);
 
 export default router;
