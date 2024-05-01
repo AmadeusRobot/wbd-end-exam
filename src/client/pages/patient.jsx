@@ -15,10 +15,9 @@ export default function PatientUser() {
                     Book Your Appointment
                 </Typography>
                 <Stack flex flexDirection="row" flexWrap="wrap" gap="2rem" paddingTop="2rem">
-                    <PatientCard />
-                    <PatientCard />
-                    <PatientCard />
-                    <PatientCard />
+                    {doctors && doctors.map(e => (
+                        <PatientCard doctor={e} key={e?._id}/>
+                    ))}
                 </Stack>
             </Container>
         </>
