@@ -9,7 +9,6 @@ import urls from "../../utils/routes";
 export default function BookAppointment() {
     const navigate = useNavigate()
     const user = JSON.parse(localStorage.getItem("endLabUser"))
-    console.log(user)
     const { doctor } = useParams()
     const [file, setFile] = useState(null)
 
@@ -17,7 +16,9 @@ export default function BookAppointment() {
         setFile(newValue)
     }
 
-    const { data, trigger, error, isMutating } = usePoster(urls.appointment.create)
+    const { data, trigger, error, isMutating } = usePoster(urls.appointment.create, {
+        "Content-Type": "multipart/formdata"
+    })
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -34,7 +35,7 @@ export default function BookAppointment() {
                 console.log(error)
                 return
             }
-            if (data) {
+            if (data && !error) {
                 alert("Successfully booked appointments")
                 navigate(`/appointments`)
             }
@@ -65,6 +66,7 @@ export default function BookAppointment() {
                                 onChange={handleChange}
                                 label="Add medical record"
                                 required
+                                itemType="application/pdf"
                             />
                         </Grid>
                         <Grid item xs={12}>

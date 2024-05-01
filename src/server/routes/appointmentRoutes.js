@@ -2,17 +2,11 @@ import express from "express";
 import Appointment from "../models/appoinment.js";
 import { downloadFile } from "../../utils/download.js";
 import Multer from "multer";
+import { UserRoles } from "../../utils/roles.js";
 
 const router = express.Router();
 
-const multer = Multer({
-    fileFilter: (_, file, cb) => {
-        if (file.originalname.split(".").pop() !== "pdf") {
-            return cb(new Error("The input file is not a pdf document"));
-        }
-        return cb(null, true);
-    },
-});
+const multer = Multer();
 
 // Create a new appointment
 router.post("/", multer.single("record"), async (req, res) => {
@@ -44,6 +38,23 @@ router.get("/", async (req, res) => {
     try {
         const appointments = await Appointment.find()
             .populate("doctor", "name")
+            .populate("nurse", "name")
+            .populate("patient", "name")
+            .populate("createdBy", "name");
+        res.json(appointments);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.get("/:user/:role", async (req, res) => {
+    let role = req.params.role
+    if(role === "user") {
+        role = "patient"
+    }
+    try {
+        const appointments = await Appointment.find({ [role]: req.params.user })
+            .populate("doctor", ["name", "hospital", "fee"])
             .populate("nurse", "name")
             .populate("patient", "name")
             .populate("createdBy", "name");

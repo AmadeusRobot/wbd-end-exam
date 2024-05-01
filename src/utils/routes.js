@@ -9,7 +9,8 @@ const urls = {
         doctors: `${serverPath}/user/doctors`
     },
     appointment: {
-        create: `${serverPath}/appointment`
+        create: `${serverPath}/appointment`,
+        finByUser: `${serverPath}/appointment/{{user}}/{{role}}`
     }
 }
 
