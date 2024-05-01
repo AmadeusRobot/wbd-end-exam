@@ -9,7 +9,6 @@ const appointmentSchema = new Schema({
     nurse: {
         type: Schema.Types.ObjectId,
         ref: "User",
-        required: "Nurse field is required",
     },
     patient: {
         type: Schema.Types.ObjectId,
@@ -27,6 +26,9 @@ const appointmentSchema = new Schema({
     createdBy: {
         type: Schema.Types.ObjectId,
         ref: "User",
+    },
+    record: {
+        type: String,
     },
 });
 
