@@ -7,6 +7,9 @@ const urls = {
         update: `${serverPath}/user/{id}`,
         login: `${serverPath}/user/login`,
         doctors: `${serverPath}/user/doctors`
+    },
+    appointment: {
+        create: `${serverPath}/appointment`
     }
 }
 
